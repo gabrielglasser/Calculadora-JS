@@ -20,7 +20,7 @@ class CalcController {
 
     initButtonsEvents(){
 
-        let buttons = document.querySelectorAll('#buttons > g; #parts > g');
+        let buttons = document.querySelectorAll('#buttons > g, #parts > g');
 
         buttons.forEach((btn, index)=>{
                 btn.addEventListener('click', e =>{
@@ -33,9 +33,10 @@ class CalcController {
     }
 
     setDisplayDateTime() {
+        console.log('atualizando a hora');
         this.displayDate = this.currentDate.toLocaleDateString(this._locale, {
             day: "2-digit",
-            month: "long",
+            month: "short",
             year: "numeric"
         });
         this.displayTime = this.currentDate.toLocaleTimeString(this._locale);
