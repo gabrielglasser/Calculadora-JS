@@ -22,6 +22,10 @@ class CalcController {
     });
   };
 
+  setLastOperation(value){
+    this._operation[this._operation.length-1] = value;
+  }
+
   //LIMPAR TUDO
   clearAll() {
     this._operation = [];
@@ -42,13 +46,17 @@ class CalcController {
     if (isNaN(this.getLastOperation())) {
       if(this.isOperator(value)){
         //trocar o operador
-      } else {
+        this.setLastOperation(value);
+      } else if(isNaN(value)){
         //outra opcao
+
+      } else {
+        this._operation.push(value);
       }
 
     } else {
       let newValue = this.getLastOperation().toString() + value.toString();
-      this._operation.push(value);
+      this.setLastOperation(parseInt(newValue));
     }
     
   };
@@ -72,25 +80,25 @@ class CalcController {
         this.cancelEntry();
         break;
       case "soma":
-        this.cancelEntry();
+        this.addOperation('+');
         break;
       case "subtracao":
-        this.cancelEntry();
+        this.addOperation('-');
         break;
       case "multiplicacao":
-        this.cancelEntry();
+        this.addOperation('*');
         break;
       case "divisao":
-        this.cancelEntry();
+        this.addOperation('/');
         break;
       case "porcento":
-        this.cancelEntry();
+        this.addOperation('%');
         break;
       case "igual":
-        this.cancelEntry();
+        
         break;
         case "ponto":
-        this.cancelEntry();
+        this.addOperation('.');
         break;
 
 
