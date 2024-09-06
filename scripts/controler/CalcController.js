@@ -32,15 +32,36 @@ class CalcController {
     this._operation.pop();
   };
 
+  //TROCAR O OPERADOR
+  isOperator(value) {
+    return (['+', '-', '*', '%', '/'].indexOf(value) > -1);
+  }
+
 //ADICIONAR OPERACAO NO ARRAY
   addOperation(value) {
-    this._operation.push(value);
+    if (isNaN(this.getLastOperation())) {
+      if(this.isOperator(value)){
+        //trocar o operador
+      } else {
+        //outra opcao
+      }
+
+    } else {
+      let newValue = this.getLastOperation().toString() + value.toString();
+      this._operation.push(value);
+    }
+    
   };
 
   //MENSAGEM DE ERRO
   setError() {
     this.displayCalc = "Error";
   }
+
+  //PEGAR A ULTIMA OPERACAO DO ARRAY
+  getLastOperation(){
+    return this._operation[this._operation.length-1];
+  };
 
   execBtn(value) {
     switch (value) {
@@ -66,6 +87,9 @@ class CalcController {
         this.cancelEntry();
         break;
       case "igual":
+        this.cancelEntry();
+        break;
+        case "ponto":
         this.cancelEntry();
         break;
 
