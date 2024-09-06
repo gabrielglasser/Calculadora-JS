@@ -41,6 +41,27 @@ class CalcController {
     return (['+', '-', '*', '%', '/'].indexOf(value) > -1);
   }
 
+  pushOperatation(value){
+    this._operation.push(value);
+
+    if(this._operation.length > 3) {
+      this.calc();
+    }
+  }
+
+  calc(){
+    let last = this._operation.pop();
+
+    let result = eval(this._operation.join(""));
+
+    this._operation = [result, last];
+  }
+
+  //MOSTRAR O ULTIMO NUMERO NO DISPLAY DA CALCULADORA
+  setLastNumberToDisplay() {
+
+  };
+
 //ADICIONAR OPERACAO NO ARRAY
   addOperation(value) {
     if (isNaN(this.getLastOperation())) {
@@ -51,12 +72,22 @@ class CalcController {
         //outra opcao
 
       } else {
-        this._operation.push(value);
+        this.pushOperatation(value);
       }
 
     } else {
-      let newValue = this.getLastOperation().toString() + value.toString();
+      if (this.isOperator(value)) {
+        this.pushOperatation(value);
+      } else {
+
+        let newValue = this.getLastOperation().toString() + value.toString();
       this.setLastOperation(parseInt(newValue));
+
+      //atualizar o display
+
+      this.setLastNumberToDisplay();
+
+      }
     }
     
   };
