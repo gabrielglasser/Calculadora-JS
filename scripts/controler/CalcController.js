@@ -55,11 +55,22 @@ class CalcController {
     let result = eval(this._operation.join(""));
 
     this._operation = [result, last];
+
+    this.setLastNumberToDisplay();
   }
 
   //MOSTRAR O ULTIMO NUMERO NO DISPLAY DA CALCULADORA
   setLastNumberToDisplay() {
+    let lastNumber;
 
+    for (let i = this._operation.lengt-1; i >= 0; i--){
+      if (!this.isOperator(this._operation[i])){
+          lastNumber = this._operation[i];
+          break;
+      }
+    }
+
+    this.displayCalc = lastNumber;
   };
 
 //ADICIONAR OPERACAO NO ARRAY
@@ -73,6 +84,8 @@ class CalcController {
 
       } else {
         this.pushOperatation(value);
+
+        this.setLastNumberToDisplay();
       }
 
     } else {
@@ -159,7 +172,7 @@ class CalcController {
       this.addEventListenerAll(btn, "click drag", (e) => {
         let textBtn = btn.className.baseVal.replace("btn-", "");
 
-        this.execBtn();
+        this.execBtn(textBtn);
       });
 
       this.addEventListenerAll(btn, "mouseover mouseup mousedown", (e) => {
