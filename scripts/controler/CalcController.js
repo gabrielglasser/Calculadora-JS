@@ -1,5 +1,7 @@
 class CalcController {
   constructor() {
+    this._lastOperator = "";
+    this._lastNumber = "";
     this.operation = [];
     this._locale = "pt-BR";
     this._displayCalcEl = document.querySelector("#display");
@@ -7,7 +9,7 @@ class CalcController {
     this._timeEl = document.querySelector("#hora");
     this.initialize();
     this.initButtonsEvents();
-    this._currentDateç
+    this._currentDateç;
   }
 
   initialize() {
@@ -54,15 +56,30 @@ class CalcController {
     }
   }
 
-  calc() {
+  getResult() {
+    return eval(this._operation.join(""));
+  }
 
-    let last = '';
-    if (this._operation.length > 3) {
-      last = this._operation.pop();
+  calc() {
+    let last = "";
+
+    this._lastNumber = this.getLastItem();
+
+    if (this._operation.length < 3){ 
+      let firstItem = this._operation[0];
+      this._operation = [firstItem, this._lastOperator, this._lastNumber
+      ];
     }
 
+    if (this._operation.length > 3) {
+      last = this._operation.pop();
 
-    let result = eval(this._operation.join(""));
+      this._lastNumber = this.getResult();
+    } else if (this._operation.length == 3){
+      this._lastOperator = this.getLastItem(false);
+    }
+
+    let result = this.getResult();
 
     if (last == "%") {
       result /= 100;
@@ -77,16 +94,26 @@ class CalcController {
     this.setLastNumberToDisplay();
   }
 
-  //MOSTRAR O ULTIMO NUMERO NO DISPLAY DA CALCULADORA
-  setLastNumberToDisplay() {
-    let lastNumber;
+  //ULTIMO PARAMETRO
+  getLastItem(isOperator = true) {
+    let lastItem;
 
     for (let i = this._operation.length - 1; i >= 0; i--) {
-      if (!this.isOperator(this._operation[i])) {
-        lastNumber = this._operation[i];
-        break;
-      }
+        if (this.isOperator(this._operation[i]) == isOperator) {
+          lastItem = this._operation[i];
+          break;
+        }
     }
+
+    if(!lastItem){
+      lastItem = (isOperator) ? this._lastOperator : this.lastNumber;
+    }
+    return lastItem;
+  }
+
+  //MOSTRAR O ULTIMO NUMERO NO DISPLAY DA CALCULADORA
+  setLastNumberToDisplay() {
+    let lastNumber = this.getLastItem(false)
 
     if (!lastNumber) lastNumber = 0;
 
