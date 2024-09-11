@@ -9,7 +9,8 @@ class CalcController {
     this._timeEl = document.querySelector("#hora");
     this.initialize();
     this.initButtonsEvents();
-    this._currentDateç;
+    this._currentDate;
+    this.initKeyboard();
   }
 
   initialize() {
@@ -19,6 +20,49 @@ class CalcController {
     }, 1000);
 
     this.setDisplayDateTime();
+  }
+
+  initKeyboard() {
+    document.addEventListener('keyup', e => {
+
+      switch (e.key) {
+        case "Escape":
+          this.clearAll();
+          break;
+        case "Backspace":
+          this.clearEntry();
+          break;
+        case "+":
+        case "-":
+        case "*":
+        case "%":
+        case "/":
+          this.addOperation(e.key);
+          break;
+        case "Enter":
+          case "=":
+          this.calc();
+          break;
+        case ".":
+          case ",":
+          this.addDot();
+          break;
+
+        case "0":
+        case "1":
+        case "2":
+        case "3":
+        case "4":
+        case "5":
+        case "6":
+        case "7":
+        case "8":
+        case "9":
+          this.addOperation(parseInt(e.key));
+          break;
+      }
+
+    });
   }
 
   addEventListenerAll(element, events, fn) {
@@ -67,7 +111,7 @@ class CalcController {
 
     this._lastNumber = this.getLastItem();
 
-    if (this._operation.length < 3){ 
+    if (this._operation.length < 3) {
       let firstItem = this._operation[0];
       this._operation = [firstItem, this._lastOperator, this._lastNumber
       ];
@@ -77,7 +121,7 @@ class CalcController {
       last = this._operation.pop();
 
       this._lastNumber = this.getResult();
-    } else if (this._operation.length == 3){
+    } else if (this._operation.length == 3) {
       this._lastOperator = this.getLastItem(false);
     }
 
@@ -101,13 +145,13 @@ class CalcController {
     let lastItem;
 
     for (let i = this._operation.length - 1; i >= 0; i--) {
-        if (this.isOperator(this._operation[i]) == isOperator) {
-          lastItem = this._operation[i];
-          break;
-        }
+      if (this.isOperator(this._operation[i]) == isOperator) {
+        lastItem = this._operation[i];
+        break;
+      }
     }
 
-    if(!lastItem){
+    if (!lastItem) {
       lastItem = (isOperator) ? this._lastOperator : this.lastNumber;
     }
     return lastItem;
@@ -178,7 +222,7 @@ class CalcController {
         this.clearAll();
         break;
       case "ce":
-        this.cancelEntry();
+        this.clearEntry();
         break;
       case "soma":
         this.addOperation("+");
